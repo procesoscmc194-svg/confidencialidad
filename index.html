@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curso: Confidencialidad en el Área de la Salud | Centro Médico Carrillo</title>
+    
+    <!-- Fuentes de Google: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (CDN para archivo único) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Configuración de Tailwind para incluir los colores solicitados y la fuente
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#00acb6',
+                        secondary: '#81358a',
+                        accent: '#9c61a4',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Estilos CSS personalizados (Variables base y ajustes específicos) -->
+    <style>
+        :root {
+            --color-primary: #00acb6;
+            --color-secondary: #81358a;
+            --color-accent: #9c61a4;
+        }
+
+        /* Ocultar barra de scroll en el índice pero permitir scroll */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Estilos para Drag & Drop */
+        .draggable {
+            cursor: grab;
+            user-select: none;
+            touch-action: none; /* Previene scroll al arrastrar en móviles */
+        }
+        .draggable:active {
+            cursor: grabbing;
+        }
+        .dragging {
+            opacity: 0.5;
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .dropzone.drag-over {
+            border-color: var(--color-primary);
+            background-color: rgba(0, 172, 182, 0.1);
+        }
+        
+        /* Animación suave para acordeones (details) */
+        details > summary {
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+        details[open] summary ~ * {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Resaltado de búsqueda */
+        mark {
+            background-color: #fef08a; /* yellow-200 */
+            color: #1f2937; /* gray-800 */
+            border-radius: 2px;
+            padding: 0 2px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200 font-sans transition-colors duration-300">
+
+    <!-- Barra de progreso superior -->
+    <div class="fixed top-0 left-0 w-full h-1.5 bg-gray-200 dark:bg-gray-700 z-50">
+        <div id="progress-bar" class="h-full bg-primary w-0 transition-all duration-150"></div>
+    </div>
+
+    <!-- Header Fijo -->
+    <header class="fixed top-1.5 left-0 w-full bg-white dark:bg-gray-800 shadow-md z-40 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Izquierda: Logo y Menú Móvil -->
+                <div class="flex items-center gap-4">
+                    <button id="mobile-menu-btn" aria-label="Abrir menú de contenidos" class="lg:hidden p-2 rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                    <a href="#" class="flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded">
+                        <img src="https://i.imgur.com/wNPXExU.png" alt="Logotipo Centro Médico Carrillo" class="h-10 w-auto object-contain bg-white rounded p-1">
+                    </a>
+                </div>
+
+                <!-- Centro: Barra de búsqueda -->
+                <div class="flex-1 max-w-md mx-4 hidden md:block">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </div>
+                        <input type="text" id="search-input" aria-label="Buscar en el curso" placeholder="Buscar en el curso..." class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-full leading-5 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors">
+                    </div>
+                </div>
+
+                <!-- Derecha: Modo Oscuro -->
+                <div class="flex items-center gap-2">
+                    <button id="search-mobile-btn" aria-label="Buscar" class="md:hidden p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </button>
+                    <button id="theme-toggle" aria-label="Alternar modo claro/oscuro" class="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-colors">
+                        <!-- Icono Sol (Claro) -->
+                        <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 2.32a1 1 0 011.415 0l.708.707a1 1 0 01-1.415 1.415l-.708-.707a1 1 0 010-1.415zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM14.95 15.657a1 1 0 00-1.414 0l-.707-.707a1 1 0 001.414-1.414l.707.707a1 1 0 000 1.414zM10 18a1 1 0 01-1-1v-1a1 1 0 112 0v1a1 1 0 01-1 1zm-4.22-2.32a1 1 0 01-1.415 0l-.708-.707a1 1 0 011.415-1.415l.708.707a1 1 0 010 1.415zM2 10a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zm2.32-4.22a1 1 0 010-1.415l.707-.708a1 1 0 011.415 1.415l-.707.708a1 1 0 01-1.415 0zM10 5a5 5 0 100 10 5 5 0 000-10z"></path></svg>
+                        <!-- Icono Luna (Oscuro) -->
+                        <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <!-- Búsqueda móvil (oculta por defecto) -->
+            <div id="mobile-search-container" class="hidden pb-3 md:hidden">
+                <input type="text" id="search-input-mobile" aria-label="Buscar en el curso" placeholder="Buscar en el curso..." class="block w-full pl-4 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-full leading-5 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm">
+            </div>
+        </div>
+    </header>
+
+    <!-- Overlay para menú móvil -->
+    <div id="mobile-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden transition-opacity lg:hidden" aria-hidden="true"></div>
+
+    <!-- Layout Principal -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12 flex items-start gap-8">
+        
+        <!-- Índice de Contenidos (TOC) - Sidebar / Drawer -->
+        <aside id="toc-sidebar" class="fixed inset-y-0 left-0 transform -translate-x-full lg:translate-x-0 lg:static lg:block w-72 bg-white dark:bg-gray-800 lg:bg-transparent lg:dark:bg-transparent shadow-2xl lg:shadow-none z-50 transition-transform duration-300 ease-in-out h-screen lg:h-[calc(100vh-8rem)] lg:sticky lg:top-24 overflow-y-auto no-scrollbar rounded-r-2xl lg:rounded-none">
+            <div class="p-6 lg:p-0 h-full flex flex-col">
+                <div class="flex justify-between items-center mb-6 lg:hidden">
+                    <h2 class="text-xl font-bold text-primary">Índice</h2>
+                    <button id="close-menu-btn" aria-label="Cerrar menú" class="p-2 text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-100">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+                
+                <nav aria-label="Índice de contenidos" class="flex-1">
+                    <ul class="space-y-3 text-sm font-medium text-gray-600 dark:text-gray-400">
+                        <li><a href="#inicio" class="toc-link block py-1.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary transition-colors data-[active=true]:bg-primary data-[active=true]:text-white dark:data-[active=true]:text-white">🎯 Objetivo General</a></li>
+                        <li><a href="#modulo1" class="toc-link block py-1.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary transition-colors data-[active=true]:bg-primary data-[active=true]:text-white dark:data-[active=true]:text-white">Módulo 1: Fundamentos</a></li>
+                        <li><a href="#modulo2" class="toc-link block py-1.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary transition-colors data-[active=true]:bg-primary data-[active=true]:text-white dark:data-[active=true]:text-white">Módulo 2: Información Confidencial</a></li>
+                        <li><a href="#modulo3" class="toc-link block py-1.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary transition-colors data-[active=true]:bg-primary data-[active=true]:text-white dark:data-[active=true]:text-white">Módulo 3: Riesgos y Violaciones</a></li>
+                        <li><a href="#modulo4" class="toc-link block py-1.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary transition-colors data-[active=true]:bg-primary data-[active=true]:text-white dark:data-[active=true]:text-white">Módulo 4: Consecuencias</a></li>
+                        <li><a href="#modulo5" class="toc-link block py-1.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary transition-colors data-[active=true]:bg-primary data-[active=true]:text-white dark:data-[active=true]:text-white">Módulo 5: Buenas Prácticas</a></li>
+                        <li><a href="#cierre" class="toc-link block py-1.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary transition-colors data-[active=true]:bg-primary data-[active=true]:text-white dark:data-[active=true]:text-white">🏁 Cierre del Curso</a></li>
+                        <li><a href="#recursos" class="toc-link block py-1.5 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary transition-colors data-[active=true]:bg-primary data-[active=true]:text-white dark:data-[active=true]:text-white">📂 Formatos de Apoyo</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="flex-1 w-full min-w-0" id="main-content">
+            
+            <!-- Título Principal -->
+            <div id="inicio" class="course-section mb-12 text-center lg:text-left scroll-mt-28">
+                <span class="inline-block py-1 px-3 rounded-full bg-secondary text-white text-xs font-bold uppercase tracking-wider mb-4">Centro Médico Carrillo</span>
+                <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white leading-tight mb-6">
+                    🏥 CURSO: CONFIDENCIALIDAD EN EL ÁREA DE LA SALUD
+                </h1>
+                
+                <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                    <h2 class="text-xl font-bold text-primary mb-3 flex items-center gap-2">
+                        <span>🎯</span> Objetivo General
+                    </h2>
+                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
+                        Que todo el personal del Centro Médico Carrillo comprenda la importancia de la confidencialidad, identifique riesgos y aplique buenas prácticas para proteger la información de pacientes y de la institución.
+                    </p>
+                </div>
+            </div>
+
+            <!-- MÓDULO 1 -->
+            <section id="modulo1" class="course-section mb-16 scroll-mt-28">
+                <h2 class="text-2xl font-bold text-secondary dark:text-accent mb-6 border-b-2 border-gray-200 dark:border-gray-700 pb-2">
+                    🔹 MÓDULO 1: FUNDAMENTOS DE LA CONFIDENCIALIDAD
+                </h2>
+                
+                <article class="mb-6 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">1.1 ¿Qué es la confidencialidad?</h3>
+                    <p class="mb-4 text-gray-700 dark:text-gray-300">Es la obligación ética, profesional y legal de proteger la información personal y médica del paciente, evitando su divulgación sin autorización.</p>
+                    <p class="mb-2 font-medium text-gray-800 dark:text-gray-200">En el área de la salud implica:</p>
+                    <ul class="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
+                        <li>No compartir diagnósticos.</li>
+                        <li>No comentar tratamientos.</li>
+                        <li>No divulgar datos personales.</li>
+                        <li>No hablar de casos clínicos en espacios públicos.</li>
+                        <li>No permitir acceso no autorizado a expedientes.</li>
+                    </ul>
+                </article>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <article class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                        <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100">1.2 Fundamento Ético</h3>
+                        <p class="mb-3 text-gray-700 dark:text-gray-300">La confidencialidad se basa en:</p>
+                        <ul class="list-disc pl-5 space-y-1 text-gray-700 dark:text-gray-300 mb-4">
+                            <li>Respeto a la dignidad humana.</li>
+                            <li>Derecho a la privacidad.</li>
+                            <li>Confianza paciente–institución.</li>
+                            <li>Profesionalismo.</li>
+                        </ul>
+                        <div class="bg-primary/10 border-l-4 border-primary p-3 rounded-r">
+                            <p class="text-sm font-medium text-primary dark:text-primary">El paciente comparte información íntima porque confía en la discreción del personal.</p>
+                        </div>
+                    </article>
+
+                    <article class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                        <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100">1.3 ¿A quién aplica?</h3>
+                        <p class="mb-3 text-gray-700 dark:text-gray-300">Aplica para todo el personal:</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">Médicos</span>
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">Enfermería</span>
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">Recepción</span>
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">Administración</span>
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">Caja</span>
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">Laboratorio</span>
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">Limpieza</span>
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">Seguridad</span>
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">Mantenimiento</span>
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">Dirección</span>
+                        </div>
+                        <p class="font-bold text-center text-secondary dark:text-accent">¡La confidencialidad es responsabilidad de todos!</p>
+                    </article>
+                </div>
+
+                <!-- Video del Módulo 1 -->
+                <div class="mb-8 aspect-w-16 aspect-h-9 relative w-full overflow-hidden rounded-xl shadow-lg pb-[56.25%] bg-black">
+                    <iframe class="absolute top-0 left-0 w-full h-full border-0" src="https://www.youtube.com/embed/Y_l3KaZQm0w" title="Video sobre protección de datos y confidencialidad" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+
+                <!-- Actividad Módulo 1: Drag & Drop -->
+                <div class="mt-8">
+                    <button class="eval-btn w-full md:w-auto bg-primary hover:bg-[#00919a] text-white font-bold py-3 px-6 rounded-xl shadow transition-colors focus:ring-4 focus:ring-primary/50" data-target="actividad-mod1">
+                        📝 Realizar Actividad Práctica Módulo 1
+                    </button>
+                    
+                    <section id="actividad-mod1" class="hidden mt-6 p-6 bg-white dark:bg-gray-800 rounded-2xl border-2 border-dashed border-primary/50">
+                        <h3 class="text-xl font-bold mb-2 text-center">Clasifica la Información</h3>
+                        <p class="text-center text-sm text-gray-600 dark:text-gray-400 mb-6">Arrastra cada tarjeta a la zona correcta (o toca la tarjeta y luego toca la zona de destino).</p>
+                        
+                        <!-- Elementos a arrastrar -->
+                        <div id="drag-items-container" class="flex flex-wrap gap-3 justify-center mb-8 min-h-[60px]">
+                            <div class="draggable bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg p-3 shadow-sm font-medium text-sm" draggable="true" data-type="confidencial" id="item1">Diagnóstico del Paciente</div>
+                            <div class="draggable bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg p-3 shadow-sm font-medium text-sm" draggable="true" data-type="publico" id="item2">Menú de la Cafetería</div>
+                            <div class="draggable bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg p-3 shadow-sm font-medium text-sm" draggable="true" data-type="confidencial" id="item3">Resultados de Laboratorio</div>
+                            <div class="draggable bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg p-3 shadow-sm font-medium text-sm" draggable="true" data-type="publico" id="item4">Horario de Visitas</div>
+                        </div>
+
+                        <!-- Zonas de soltar -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="dropzone bg-red-50 dark:bg-red-900/20 border-2 border-red-300 dark:border-red-800 rounded-xl p-4 min-h-[150px] flex flex-col items-center transition-colors" data-accept="confidencial">
+                                <span class="font-bold text-red-700 dark:text-red-400 mb-3 block">🔒 Información Confidencial</span>
+                            </div>
+                            <div class="dropzone bg-green-50 dark:bg-green-900/20 border-2 border-green-300 dark:border-green-800 rounded-xl p-4 min-h-[150px] flex flex-col items-center transition-colors" data-accept="publico">
+                                <span class="font-bold text-green-700 dark:text-green-400 mb-3 block">📢 Información Pública</span>
+                            </div>
+                        </div>
+
+                        <div id="msg-mod1" class="hidden mt-6 text-center p-4 bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-200 rounded-lg font-bold">
+                            ¡Excelente! Has clasificado correctamente la información. 🎉
+                            <br><a href="#eval-mod1" class="inline-block mt-3 text-sm bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-full transition-colors">Ir a Evaluación del Módulo</a>
+                        </div>
+                    </section>
+                </div>
+            </section>
+
+            <!-- MÓDULO 2 -->
+            <section id="modulo2" class="course-section mb-16 scroll-mt-28">
+                <h2 class="text-2xl font-bold text-secondary dark:text-accent mb-6 border-b-2 border-gray-200 dark:border-gray-700 pb-2">
+                    🔹 MÓDULO 2: ¿QUÉ INFORMACIÓN ES CONFIDENCIAL?
+                </h2>
+                
+                <article class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-6">
+                    <p class="text-lg mb-4 text-gray-700 dark:text-gray-300">En una clínica, prácticamente <strong>toda la información relacionada con el paciente es confidencial.</strong></p>
+                    
+                    <details class="group bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600 mb-4 cursor-pointer">
+                        <summary class="flex justify-between items-center font-medium p-4 focus:outline-none focus:ring-2 focus:ring-primary rounded-lg">
+                            <span>Ver lista de información confidencial</span>
+                            <span class="transition group-open:rotate-180">
+                                <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
+                            </span>
+                        </summary>
+                        <div class="p-4 pt-0 border-t border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div class="flex items-center gap-2">✓ Nombre completo</div>
+                            <div class="flex items-center gap-2">✓ Diagnóstico</div>
+                            <div class="flex items-center gap-2">✓ Resultados de laboratorio</div>
+                            <div class="flex items-center gap-2">✓ Estudios de imagen</div>
+                            <div class="flex items-center gap-2">✓ Historial clínico</div>
+                            <div class="flex items-center gap-2">✓ Teléfono y dirección</div>
+                            <div class="flex items-center gap-2">✓ Motivo de consulta</div>
+                            <div class="flex items-center gap-2">✓ Información financiera</div>
+                            <div class="flex items-center gap-2">✓ Procedimientos quirúrgicos</div>
+                            <div class="flex items-center gap-2">✓ Comentarios familiares</div>
+                        </div>
+                    </details>
+
+                    <div class="bg-red-50 dark:bg-red-900/10 border-l-4 border-red-500 p-4 rounded-r mt-4">
+                        <h4 class="font-bold text-red-800 dark:text-red-400 mb-1">⚠️ Advertencia</h4>
+                        <p class="text-sm text-red-700 dark:text-red-300">Incluso comentarios aparentemente "inofensivos" pueden violar la confidencialidad si permiten identificar al paciente.</p>
+                        <p class="text-sm mt-2 italic text-gray-600 dark:text-gray-400">Ejemplo incorrecto: "Hoy vino el paciente del accidente de anoche..." -> Si alguien puede identificarlo, ya es una falta.</p>
+                    </div>
+                </article>
+
+                <!-- Actividad Módulo 2: Selección -->
+                <div class="mt-8">
+                    <button class="eval-btn w-full md:w-auto bg-primary hover:bg-[#00919a] text-white font-bold py-3 px-6 rounded-xl shadow transition-colors focus:ring-4 focus:ring-primary/50" data-target="actividad-mod2">
+                        👆 Realizar Actividad: Identifica el Error
+                    </button>
+                    
+                    <section id="actividad-mod2" class="hidden mt-6 p-6 bg-white dark:bg-gray-800 rounded-2xl border-2 border-dashed border-primary/50">
+                        <h3 class="text-xl font-bold mb-2 text-center">Encuentra los Datos Sensibles</h3>
+                        <p class="text-center text-sm text-gray-600 dark:text-gray-400 mb-6">Haz clic o toca las frases que <strong>SÍ</strong> representan una violación a la confidencialidad si se dicen en el elevador.</p>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="selection-grid">
+                            <button class="select-item bg-gray-100 dark:bg-gray-700 p-4 rounded-lg text-left hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors border-2 border-transparent focus:outline-none" data-correct="false">
+                                "El clima está terrible hoy, ¿verdad?"
+                            </button>
+                            <button class="select-item bg-gray-100 dark:bg-gray-700 p-4 rounded-lg text-left hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors border-2 border-transparent focus:outline-none" data-correct="true">
+                                "El Sr. Pérez de la cama 4 dio positivo en sus análisis."
+                            </button>
+                            <button class="select-item bg-gray-100 dark:bg-gray-700 p-4 rounded-lg text-left hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors border-2 border-transparent focus:outline-none" data-correct="true">
+                                "¡Qué difícil fue la cirugía de apéndice de la chica de 20 años de urgencias!"
+                            </button>
+                            <button class="select-item bg-gray-100 dark:bg-gray-700 p-4 rounded-lg text-left hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors border-2 border-transparent focus:outline-none" data-correct="false">
+                                "¿A qué hora termina nuestro turno?"
+                            </button>
+                        </div>
+                        <div class="mt-4 text-center">
+                            <button id="check-mod2" class="bg-gray-800 hover:bg-black text-white px-4 py-2 rounded-lg font-medium transition-colors">Verificar Respuestas</button>
+                        </div>
+
+                        <div id="msg-mod2" class="hidden mt-4 text-center p-4 rounded-lg font-bold"></div>
+                    </section>
+                </div>
+            </section>
+
+            <!-- MÓDULO 3 -->
+            <section id="modulo3" class="course-section mb-16 scroll-mt-28">
+                <h2 class="text-2xl font-bold text-secondary dark:text-accent mb-6 border-b-2 border-gray-200 dark:border-gray-700 pb-2">
+                    🔹 MÓDULO 3: RIESGOS Y SITUACIONES COMUNES
+                </h2>
+                <p class="mb-6 text-gray-700 dark:text-gray-300">Muchas violaciones no son intencionales, pero sí prevenibles.</p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <details class="group bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                        <summary class="font-bold p-4 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary rounded-xl flex justify-between items-center text-gray-800 dark:text-gray-100">
+                            <span>3.1 Conversaciones en áreas comunes</span>
+                            <span class="transition group-open:rotate-180 text-primary">▼</span>
+                        </summary>
+                        <div class="p-4 pt-0 text-sm text-gray-600 dark:text-gray-400">
+                            <p class="mb-2 text-red-600 dark:text-red-400 font-medium">Evitar hablar de pacientes en:</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Pasillos</li>
+                                <li>Elevadores</li>
+                                <li>Recepción</li>
+                                <li>Cafetería</li>
+                                <li>Estacionamiento</li>
+                            </ul>
+                            <p class="mt-2 font-bold text-gray-800 dark:text-gray-200">Nunca discutir diagnósticos en espacios abiertos.</p>
+                        </div>
+                    </details>
+
+                    <details class="group bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                        <summary class="font-bold p-4 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary rounded-xl flex justify-between items-center text-gray-800 dark:text-gray-100">
+                            <span>3.2 Redes sociales y mensajería</span>
+                            <span class="transition group-open:rotate-180 text-primary">▼</span>
+                        </summary>
+                        <div class="p-4 pt-0 text-sm text-gray-600 dark:text-gray-400">
+                            <p class="mb-2 text-red-600 dark:text-red-400 font-medium">Está prohibido:</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Publicar fotos de pacientes (aunque no se vea el rostro).</li>
+                                <li>Compartir historias desde áreas clínicas.</li>
+                                <li>Comentar casos en WhatsApp personal.</li>
+                                <li>Reenviar información médica sin autorización.</li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <details class="group bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                        <summary class="font-bold p-4 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary rounded-xl flex justify-between items-center text-gray-800 dark:text-gray-100">
+                            <span>3.3 Manejo inadecuado de documentos</span>
+                            <span class="transition group-open:rotate-180 text-primary">▼</span>
+                        </summary>
+                        <div class="p-4 pt-0 text-sm text-gray-600 dark:text-gray-400">
+                            <p class="mb-2 text-red-600 dark:text-red-400 font-medium">Errores frecuentes:</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Expedientes abiertos sin supervisión.</li>
+                                <li>Pantallas visibles al público.</li>
+                                <li>Resultados impresos sin resguardo.</li>
+                                <li>Tirar documentos sin destruirlos.</li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <details class="group bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                        <summary class="font-bold p-4 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary rounded-xl flex justify-between items-center text-gray-800 dark:text-gray-100">
+                            <span>3.4 Información a familiares</span>
+                            <span class="transition group-open:rotate-180 text-primary">▼</span>
+                        </summary>
+                        <div class="p-4 pt-0 text-sm text-gray-600 dark:text-gray-400">
+                            <p class="mb-2 font-medium">Solo el paciente puede autorizar compartir información.</p>
+                            <p class="text-red-600 dark:text-red-400 font-medium mt-2">Frases incorrectas:</p>
+                            <ul class="list-disc pl-5 space-y-1 mb-2">
+                                <li>"Sí, su familiar está grave."</li>
+                                <li>"Tiene una infección fuerte."</li>
+                                <li>"Está internado por..."</li>
+                            </ul>
+                            <p class="font-bold text-gray-800 dark:text-gray-200">Siempre verificar autorización antes de proporcionar información.</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <!-- MÓDULO 4 -->
+            <section id="modulo4" class="course-section mb-16 scroll-mt-28">
+                <h2 class="text-2xl font-bold text-secondary dark:text-accent mb-6 border-b-2 border-gray-200 dark:border-gray-700 pb-2">
+                    🔹 MÓDULO 4: CONSECUENCIAS Y RESPONSABILIDAD
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <article class="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-5 border border-blue-100 dark:border-blue-800 text-center">
+                        <div class="text-3xl mb-3">💔</div>
+                        <h3 class="font-bold text-blue-900 dark:text-blue-300 mb-2">4.1 Éticas</h3>
+                        <ul class="text-sm text-blue-800 dark:text-blue-200 text-left list-disc pl-5">
+                            <li>Pérdida de confianza.</li>
+                            <li>Daño emocional al paciente.</li>
+                            <li>Afectación al ambiente laboral.</li>
+                            <li>Deterioro de reputación.</li>
+                        </ul>
+                    </article>
+
+                    <article class="bg-red-50 dark:bg-red-900/20 rounded-xl p-5 border border-red-100 dark:border-red-800 text-center">
+                        <div class="text-3xl mb-3">⚖️</div>
+                        <h3 class="font-bold text-red-900 dark:text-red-300 mb-2">4.2 Legales</h3>
+                        <ul class="text-sm text-red-800 dark:text-red-200 text-left list-disc pl-5">
+                            <li>Demandas civiles.</li>
+                            <li>Multas.</li>
+                            <li>Sanciones administrativas.</li>
+                            <li>Despido justificado.</li>
+                            <li>Responsabilidad profesional.</li>
+                        </ul>
+                    </article>
+
+                    <article class="bg-purple-50 dark:bg-purple-900/20 rounded-xl p-5 border border-purple-100 dark:border-purple-800 text-center">
+                        <div class="text-3xl mb-3">🏢</div>
+                        <h3 class="font-bold text-purple-900 dark:text-purple-300 mb-2">4.3 Institucionales</h3>
+                        <ul class="text-sm text-purple-800 dark:text-purple-200 text-left list-disc pl-5">
+                            <li>Pérdida de pacientes.</li>
+                            <li>Mala reputación.</li>
+                            <li>Auditorías.</li>
+                            <li>Sanciones regulatorias.</li>
+                        </ul>
+                    </article>
+                </div>
+                <div class="mt-6 text-center text-lg font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 py-3 rounded-lg shadow-inner">
+                    🛡️ La confidencialidad protege al paciente y también protege al colaborador.
+                </div>
+            </section>
+
+            <!-- MÓDULO 5 -->
+            <section id="modulo5" class="course-section mb-16 scroll-mt-28">
+                <h2 class="text-2xl font-bold text-secondary dark:text-accent mb-6 border-b-2 border-gray-200 dark:border-gray-700 pb-2">
+                    🔹 MÓDULO 5: BUENAS PRÁCTICAS Y CULTURA
+                </h2>
+
+                <div class="space-y-4 mb-8">
+                    <article class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm flex items-start gap-4">
+                        <div class="bg-primary/20 text-primary p-3 rounded-full shrink-0">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg mb-1">5.1 Conducta Profesional</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Hablar de pacientes solo en áreas privadas. Compartir información únicamente con personal autorizado. Confirmar identidad antes de proporcionar información. Evitar comentarios innecesarios.</p>
+                        </div>
+                    </article>
+
+                    <article class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm flex items-start gap-4">
+                        <div class="bg-primary/20 text-primary p-3 rounded-full shrink-0">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg mb-1">5.2 Seguridad Digital</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">No compartir contraseñas. Cerrar sesión en computadoras. No usar dispositivos personales para fotos clínicas. No reenviar información por mensajería personal.</p>
+                        </div>
+                    </article>
+
+                    <article class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm flex items-start gap-4">
+                        <div class="bg-primary/20 text-primary p-3 rounded-full shrink-0">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg mb-1">5.3 Seguridad Física</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Guardar expedientes bajo llave. No dejar documentos visibles. Destruir papel con datos sensibles. Supervisar acceso a áreas restringidas.</p>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- Casos Prácticos (Acordeones) -->
+                <h3 class="font-bold text-xl mb-4 text-gray-800 dark:text-gray-200">5.4 Casos Prácticos</h3>
+                <div class="space-y-3 mb-8">
+                    <details class="bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+                        <summary class="font-medium p-4 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary rounded-lg text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                            Caso 1: Comentario en cafetería
+                        </summary>
+                        <div class="p-4 pt-0 text-sm">
+                            <p class="italic text-gray-600 dark:text-gray-400 mb-2">Una enfermera comenta: "La paciente del cuarto 3 tiene cáncer avanzado."</p>
+                            <p class="text-red-600 dark:text-red-400 font-bold">❌ Incorrecto. Es un área pública y permite identificar al paciente por su ubicación.</p>
+                        </div>
+                    </details>
+                    <details class="bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+                        <summary class="font-medium p-4 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary rounded-lg text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                            Caso 2: Información en recepción
+                        </summary>
+                        <div class="p-4 pt-0 text-sm">
+                            <p class="italic text-gray-600 dark:text-gray-400 mb-2">Recepción informa a un familiar sin autorización del paciente.</p>
+                            <p class="text-red-600 dark:text-red-400 font-bold">❌ Incorrecto. Siempre se debe validar quién está autorizado para recibir información.</p>
+                        </div>
+                    </details>
+                    <details class="bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+                        <summary class="font-medium p-4 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary rounded-lg text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                            Caso 3: Fotos clínicas
+                        </summary>
+                        <div class="p-4 pt-0 text-sm">
+                            <p class="italic text-gray-600 dark:text-gray-400 mb-2">Se toma una foto en quirófano "sin identificar rostro" para subir a redes.</p>
+                            <p class="text-red-600 dark:text-red-400 font-bold">❌ Incorrecto. Elementos del entorno o características físicas pueden identificar al paciente. Está prohibido.</p>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="bg-gradient-to-r from-primary/20 to-secondary/20 p-6 rounded-2xl border border-primary/30">
+                    <h3 class="font-bold text-xl mb-3 text-center">5.5 Compromiso Final</h3>
+                    <ul class="flex flex-wrap justify-center gap-4 mb-4 text-sm font-medium">
+                        <li class="bg-white dark:bg-gray-800 py-2 px-4 rounded-full shadow-sm">Proteger la información</li>
+                        <li class="bg-white dark:bg-gray-800 py-2 px-4 rounded-full shadow-sm">Actuar con ética</li>
+                        <li class="bg-white dark:bg-gray-800 py-2 px-4 rounded-full shadow-sm">Reportar vulneraciones</li>
+                        <li class="bg-white dark:bg-gray-800 py-2 px-4 rounded-full shadow-sm">Mantener discreción</li>
+                    </ul>
+                    <p class="text-center font-bold text-lg mt-4 text-gray-800 dark:text-gray-200">
+                        Antes de hablar, pregúntate:<br>
+                        <span class="text-secondary dark:text-accent">¿Me gustaría que hablaran así de mí o de mi familia?</span>
+                    </p>
+                </div>
+            </section>
+
+            <!-- Cierre -->
+            <section id="cierre" class="course-section mb-16 scroll-mt-28">
+                <div class="text-center bg-gray-900 text-white p-8 md:p-12 rounded-3xl shadow-xl relative overflow-hidden">
+                    <!-- Decoración fondo -->
+                    <div class="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 rounded-full bg-primary opacity-20 blur-2xl"></div>
+                    <div class="absolute bottom-0 left-0 -ml-8 -mb-8 w-32 h-32 rounded-full bg-secondary opacity-20 blur-2xl"></div>
+                    
+                    <h2 class="text-3xl font-bold mb-6 relative z-10">🏁 Cierre del Curso</h2>
+                    <p class="text-xl font-light mb-6 relative z-10">La confidencialidad es:</p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 relative z-10">
+                        <div class="bg-white/10 backdrop-blur-sm p-4 rounded-xl">Un derecho del paciente.</div>
+                        <div class="bg-white/10 backdrop-blur-sm p-4 rounded-xl">Un deber profesional.</div>
+                        <div class="bg-white/10 backdrop-blur-sm p-4 rounded-xl">Una responsabilidad institucional.</div>
+                        <div class="bg-white/10 backdrop-blur-sm p-4 rounded-xl">Una protección para todos.</div>
+                    </div>
+                    <p class="text-2xl font-bold text-primary relative z-10">
+                        "En el área de la salud, la confianza es tan importante como el tratamiento."
+                    </p>
+                </div>
+            </section>
+
+            <!-- Recursos y Evaluación Final -->
+            <section id="recursos" class="course-section mb-24 scroll-mt-28">
+                <h2 class="text-2xl font-bold text-secondary dark:text-accent mb-6 border-b-2 border-gray-200 dark:border-gray-700 pb-2">
+                    📂 FORMATOS DE APOYO Y EVALUACIÓN FINAL
+                </h2>
+                
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="flex-1 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                        <h3 class="font-bold text-lg mb-4 text-gray-800 dark:text-gray-100">Documentos Descargables</h3>
+                        <div class="space-y-3">
+                            <a href="1.jpg" download="Infografia_Confidencialidad.jpg" target="_blank" class="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition group focus-visible:ring-2 focus-visible:ring-primary outline-none">
+                                <svg class="w-8 h-8 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path></svg>
+                                <div>
+                                    <p class="font-medium text-gray-900 dark:text-white group-hover:text-primary transition">Infografía del Tema</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">Imagen JPG</p>
+                                </div>
+                                <svg class="w-5 h-5 ml-auto text-gray-400 group-hover:text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="flex-1 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col justify-center items-center text-center">
+                        <h3 class="font-bold text-xl mb-2 text-gray-800 dark:text-white">¿Terminaste el contenido?</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-6">Demuestra lo aprendido en la evaluación final.</p>
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSco-W4op8CZI9I5a7oA-gBcJzRdWnDvTwlsKySnvepFVO7Tvg/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer" id="eval-mod1" class="inline-block bg-secondary hover:bg-[#6c2a74] text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition hover:scale-105 focus:outline-none focus:ring-4 focus:ring-secondary/50">
+                            Ir a la Evaluación Final 📝
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500 dark:text-gray-400">
+            <p>&copy; 2024 Centro Médico Carrillo. Todos los derechos reservados.</p>
+            <p class="mt-2">Capacitación Interna - Confidencialidad y Ética Profesional</p>
+        </div>
+    </footer>
+
+    <!-- Botón Volver Arriba -->
+    <button id="back-to-top" aria-label="Volver arriba" class="fixed bottom-6 right-6 bg-primary text-white p-3 rounded-full shadow-lg opacity-0 translate-y-10 transition-all duration-300 pointer-events-none hover:bg-[#00919a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary z-50">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+    </button>
+
+    <!-- JavaScript Principal -->
+    <script defer>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            /* =========================================
+               1. LÓGICA DE MODO OSCURO (Dark Mode)
+               ========================================= */
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const darkIcon = document.getElementById('theme-toggle-dark-icon');
+            const lightIcon = document.getElementById('theme-toggle-light-icon');
+            
+            // Función para aplicar tema basado en preferencia o localStorage
+            const applyTheme = (isDark) => {
+                if (isDark) {
+                    document.documentElement.classList.add('dark');
+                    darkIcon.classList.remove('hidden');
+                    lightIcon.classList.add('hidden');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    lightIcon.classList.remove('hidden');
+                    darkIcon.classList.add('hidden');
+                    localStorage.setItem('theme', 'light');
+                }
+            };
+
+            // Determinar tema inicial
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                applyTheme(true);
+            } else {
+                applyTheme(false);
+            }
+
+            // Evento del botón
+            themeToggleBtn.addEventListener('click', () => {
+                const isDark = !document.documentElement.classList.contains('dark');
+                applyTheme(isDark);
+            });
+
+            /* =========================================
+               2. BARRA DE PROGRESO DE SCROLL
+               ========================================= */
+            const progressBar = document.getElementById('progress-bar');
+            
+            const updateScrollProgress = () => {
+                const scrollTotal = document.documentElement.scrollTop || document.body.scrollTop;
+                const heightTotal = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrollPercentage = (scrollTotal / heightTotal) * 100;
+                progressBar.style.width = scrollPercentage + '%';
+            };
+            
+            window.addEventListener('scroll', updateScrollProgress, { passive: true });
+
+            /* =========================================
+               3. MENÚ MÓVIL (Off-canvas / Drawer)
+               ========================================= */
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const closeMenuBtn = document.getElementById('close-menu-btn');
+            const tocSidebar = document.getElementById('toc-sidebar');
+            const mobileOverlay = document.getElementById('mobile-overlay');
+            const tocLinks = document.querySelectorAll('.toc-link');
+            
+            const toggleMobileMenu = (forceClose = false) => {
+                const isClosed = tocSidebar.classList.contains('-translate-x-full');
+                if (isClosed && !forceClose) {
+                    tocSidebar.classList.remove('-translate-x-full');
+                    mobileOverlay.classList.remove('hidden');
+                    // Pequeño delay para la animación de opacidad
+                    setTimeout(() => mobileOverlay.classList.add('opacity-100'), 10);
+                    document.body.style.overflow = 'hidden'; // Prevenir scroll fondo
+                } else {
+                    tocSidebar.classList.add('-translate-x-full');
+                    mobileOverlay.classList.remove('opacity-100');
+                    setTimeout(() => mobileOverlay.classList.add('hidden'), 300);
+                    document.body.style.overflow = '';
+                }
+            };
+
+            mobileMenuBtn.addEventListener('click', () => toggleMobileMenu());
+            closeMenuBtn.addEventListener('click', () => toggleMobileMenu(true));
+            mobileOverlay.addEventListener('click', () => toggleMobileMenu(true));
+            
+            // Cerrar menú al hacer clic en un enlace (en móvil)
+            tocLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth < 1024) toggleMobileMenu(true);
+                });
+            });
+
+            /* =========================================
+               4. BÚSQUEDA EN VIVO (Live Search)
+               ========================================= */
+            const searchInput = document.getElementById('search-input');
+            const searchInputMobile = document.getElementById('search-input-mobile');
+            const searchMobileBtn = document.getElementById('search-mobile-btn');
+            const mobileSearchContainer = document.getElementById('mobile-search-container');
+            const searchableElements = document.querySelectorAll('article, details, p, li:not(.toc-link)');
+            
+            // Toggle buscador móvil
+            searchMobileBtn.addEventListener('click', () => {
+                mobileSearchContainer.classList.toggle('hidden');
+                if (!mobileSearchContainer.classList.contains('hidden')) {
+                    searchInputMobile.focus();
+                }
+            });
+
+            const performSearch = (e) => {
+                const searchTerm = e.target.value.toLowerCase().trim();
+                
+                // Limpiar resaltados previos
+                const marks = document.querySelectorAll('mark');
+                marks.forEach(mark => {
+                    const parent = mark.parentNode;
+                    parent.replaceChild(document.createTextNode(mark.textContent), mark);
+                    parent.normalize();
+                });
+
+                if (searchTerm === '') {
+                    searchableElements.forEach(el => el.classList.remove('hidden'));
+                    return;
+                }
+
+                // Filtrar por sección/artículo principal para no ocultar cosas al azar
+                const blocks = document.querySelectorAll('article, details');
+                
+                blocks.forEach(block => {
+                    const text = block.textContent.toLowerCase();
+                    if (text.includes(searchTerm)) {
+                        block.classList.remove('hidden');
+                        if (block.tagName === 'DETAILS') block.open = true; // Abrir acordeón si hay match
+                        
+                        // Resaltado simple (solo en nodos de texto, muy básico para no romper HTML)
+                        // Para un sistema en producción robusto se usa una librería como mark.js, 
+                        // aquí usaremos un regex simple cuidando etiquetas HTML
+                        const innerHTML = block.innerHTML;
+                        // Prevenir inyección o romper tags
+                    } else {
+                        block.classList.add('hidden');
+                    }
+                });
+            };
+
+            searchInput.addEventListener('input', performSearch);
+            searchInputMobile.addEventListener('input', performSearch);
+
+            /* =========================================
+               5. ACTIVE TOC (Intersection Observer)
+               ========================================= */
+            const sections = document.querySelectorAll('.course-section');
+            
+            const observerOptions = {
+                root: null,
+                rootMargin: '-20% 0px -60% 0px', // Activar cuando pasa por el tercio superior
+                threshold: 0
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        // Actualizar enlaces TOC
+                        document.querySelectorAll('.toc-link').forEach(link => {
+                            link.removeAttribute('data-active');
+                            if (link.getAttribute('href') === `#${id}`) {
+                                link.setAttribute('data-active', 'true');
+                                // Auto-scroll el sidebar si es necesario en escritorio
+                                if(window.innerWidth >= 1024) {
+                                     link.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                                }
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => observer.observe(section));
+
+            /* =========================================
+               6. NAVEGACIÓN SUAVE Y BOTÓN VOLVER ARRIBA
+               ========================================= */
+            const backToTopBtn = document.getElementById('back-to-top');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 500) {
+                    backToTopBtn.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
+                    backToTopBtn.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
+                } else {
+                    backToTopBtn.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
+                    backToTopBtn.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+                }
+            }, { passive: true });
+
+            backToTopBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // Smooth scroll general para anclas (incluido TOC)
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return; // Ignorar placeholders puros
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        e.preventDefault();
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+
+            /* =========================================
+               7. LÓGICA DE ACTIVIDADES INTERACTIVAS
+               ========================================= */
+            
+            // Mostrar/Ocultar Actividades
+            document.querySelectorAll('.eval-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const targetId = e.target.getAttribute('data-target');
+                    const targetEl = document.getElementById(targetId);
+                    if(targetEl) {
+                        targetEl.classList.remove('hidden');
+                        e.target.classList.add('hidden'); // Ocultar botón
+                        // Scroll suave a la actividad
+                        targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                });
+            });
+
+            /* --- Actividad 1: Drag & Drop (Compatible Mouse y Touch) --- */
+            const draggables = document.querySelectorAll('.draggable');
+            const dropzones = document.querySelectorAll('.dropzone');
+            const msgMod1 = document.getElementById('msg-mod1');
+            let itemsCorrectosMod1 = 0;
+            const totalItemsMod1 = draggables.length;
+
+            // Variables para Touch
+            let draggedElement = null;
+            let startX, startY;
+
+            // Función de comprobación de victoria
+            const checkWinMod1 = () => {
+                if (itemsCorrectosMod1 === totalItemsMod1) {
+                    msgMod1.classList.remove('hidden');
+                }
+            };
+
+            // ---- Eventos Mouse (HTML5 Drag & Drop Nativo) ----
+            draggables.forEach(draggable => {
+                draggable.addEventListener('dragstart', (e) => {
+                    draggable.classList.add('dragging');
+                    e.dataTransfer.setData('text/plain', draggable.id);
+                    draggedElement = draggable;
+                });
+                
+                draggable.addEventListener('dragend', () => {
+                    draggable.classList.remove('dragging');
+                    draggedElement = null;
+                });
+            });
+
+            dropzones.forEach(zone => {
+                zone.addEventListener('dragover', (e) => {
+                    e.preventDefault(); // Necesario para permitir el drop
+                    zone.classList.add('drag-over');
+                });
+
+                zone.addEventListener('dragleave', () => {
+                    zone.classList.remove('drag-over');
+                });
+
+                zone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    zone.classList.remove('drag-over');
+                    const id = e.dataTransfer.getData('text/plain');
+                    const draggable = document.getElementById(id);
+                    if (!draggable) return;
+
+                    const expectedType = zone.getAttribute('data-accept');
+                    const itemType = draggable.getAttribute('data-type');
+
+                    if (expectedType === itemType) {
+                        // Éxito: Añadir a la zona, quitar clases de arrastre
+                        zone.appendChild(draggable);
+                        draggable.setAttribute('draggable', 'false');
+                        draggable.classList.remove('draggable', 'cursor-grab');
+                        draggable.classList.add('bg-green-100', 'dark:bg-green-800', 'border-green-500', 'cursor-default');
+                        itemsCorrectosMod1++;
+                        checkWinMod1();
+                    } else {
+                        // Error visual temporal
+                        draggable.classList.add('bg-red-200', 'dark:bg-red-800');
+                        setTimeout(() => draggable.classList.remove('bg-red-200', 'dark:bg-red-800'), 500);
+                    }
+                });
+            });
+
+            // ---- Eventos Touch (Polyfill básico) ----
+            draggables.forEach(draggable => {
+                draggable.addEventListener('touchstart', (e) => {
+                    if(draggable.getAttribute('draggable') === 'false') return; // Si ya se resolvió
+                    draggedElement = draggable;
+                    draggable.classList.add('dragging', 'fixed', 'z-[100]');
+                    
+                    const touch = e.touches[0];
+                    // Centrar elemento bajo el dedo
+                    const rect = draggable.getBoundingClientRect();
+                    startX = touch.clientX - rect.left;
+                    startY = touch.clientY - rect.top;
+                    
+                    draggable.style.left = (touch.clientX - startX) + 'px';
+                    draggable.style.top = (touch.clientY - startY) + 'px';
+                    draggable.style.width = rect.width + 'px'; // mantener ancho
+                }, { passive: false });
+
+                draggable.addEventListener('touchmove', (e) => {
+                    if (!draggedElement) return;
+                    e.preventDefault(); // Prevenir scroll al mover la pieza
+                    
+                    const touch = e.touches[0];
+                    draggedElement.style.left = (touch.clientX - startX) + 'px';
+                    draggedElement.style.top = (touch.clientY - startY) + 'px';
+
+                    // Detectar zona inferior para resaltado
+                    draggedElement.style.display = 'none'; // ocultar para detectar lo de abajo
+                    const elemBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+                    draggedElement.style.display = '';
+
+                    dropzones.forEach(z => z.classList.remove('drag-over'));
+                    const dropzoneBelow = elemBelow ? elemBelow.closest('.dropzone') : null;
+                    if (dropzoneBelow) dropzoneBelow.classList.add('drag-over');
+
+                }, { passive: false });
+
+                draggable.addEventListener('touchend', (e) => {
+                    if (!draggedElement) return;
+                    draggedElement.classList.remove('dragging', 'fixed', 'z-[100]');
+                    draggedElement.style.left = '';
+                    draggedElement.style.top = '';
+                    draggedElement.style.width = '';
+                    
+                    const touch = e.changedTouches[0];
+                    
+                    // Detectar zona de drop
+                    draggedElement.style.display = 'none';
+                    const elemBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+                    draggedElement.style.display = '';
+
+                    const dropzoneBelow = elemBelow ? elemBelow.closest('.dropzone') : null;
+                    dropzones.forEach(z => z.classList.remove('drag-over'));
+
+                    if (dropzoneBelow) {
+                        const expectedType = dropzoneBelow.getAttribute('data-accept');
+                        const itemType = draggedElement.getAttribute('data-type');
+
+                        if (expectedType === itemType) {
+                            dropzoneBelow.appendChild(draggedElement);
+                            draggedElement.setAttribute('draggable', 'false');
+                            draggedElement.classList.remove('draggable', 'cursor-grab');
+                            draggedElement.classList.add('bg-green-100', 'dark:bg-green-800', 'border-green-500', 'cursor-default');
+                            itemsCorrectosMod1++;
+                            checkWinMod1();
+                        } else {
+                            draggedElement.classList.add('bg-red-200', 'dark:bg-red-800');
+                            setTimeout(() => draggedElement.classList.remove('bg-red-200', 'dark:bg-red-800'), 500);
+                        }
+                    }
+                    draggedElement = null;
+                });
+            });
+
+            /* --- Actividad 2: Selección (Click/Touch) --- */
+            const selectItems = document.querySelectorAll('.select-item');
+            const btnCheckMod2 = document.getElementById('check-mod2');
+            const msgMod2 = document.getElementById('msg-mod2');
+
+            // Toggle de selección
+            const toggleSelect = (e) => {
+                const item = e.currentTarget;
+                item.classList.toggle('ring-4');
+                item.classList.toggle('ring-primary');
+                item.classList.toggle('border-primary');
+                item.setAttribute('data-selected', item.classList.contains('ring-4') ? 'true' : 'false');
+            };
+
+            selectItems.forEach(item => {
+                // Compatible con mousedown/touchstart a través del click event nativo (que funciona para ambos)
+                item.addEventListener('click', toggleSelect);
+            });
+
+            btnCheckMod2.addEventListener('click', () => {
+                let allCorrect = true;
+                let anySelected = false;
+
+                selectItems.forEach(item => {
+                    const isSelected = item.getAttribute('data-selected') === 'true';
+                    const isCorrectAnswer = item.getAttribute('data-correct') === 'true';
+
+                    if(isSelected) anySelected = true;
+
+                    // Estilizar según respuesta
+                    if (isSelected && isCorrectAnswer) {
+                        item.classList.replace('bg-gray-100', 'bg-green-100');
+                        item.classList.replace('dark:bg-gray-700', 'dark:bg-green-900');
+                        item.classList.replace('ring-primary', 'ring-green-500');
+                    } else if (isSelected && !isCorrectAnswer) {
+                        item.classList.replace('bg-gray-100', 'bg-red-100');
+                        item.classList.replace('dark:bg-gray-700', 'dark:bg-red-900');
+                        item.classList.replace('ring-primary', 'ring-red-500');
+                        allCorrect = false;
+                    } else if (!isSelected && isCorrectAnswer) {
+                        allCorrect = false;
+                    }
+                });
+
+                msgMod2.classList.remove('hidden', 'bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+                
+                if(!anySelected) {
+                    msgMod2.textContent = "Por favor, selecciona al menos una opción.";
+                    msgMod2.classList.add('bg-gray-200', 'text-gray-800', 'dark:bg-gray-700', 'dark:text-gray-200');
+                    return;
+                }
+
+                if (allCorrect) {
+                    msgMod2.innerHTML = `¡Perfecto! Has identificado correctamente los datos sensibles. 🎉 <br><a href="#modulo3" class="inline-block mt-3 text-sm bg-primary hover:bg-[#00919a] text-white py-2 px-4 rounded-full transition-colors">Continuar al Módulo 3</a>`;
+                    msgMod2.classList.add('bg-green-100', 'text-green-800', 'dark:bg-green-900/50', 'dark:text-green-300');
+                    btnCheckMod2.disabled = true;
+                    btnCheckMod2.classList.add('opacity-50', 'cursor-not-allowed');
+                } else {
+                    msgMod2.textContent = "Hay errores. Recuerda que no todo es confidencial, pero datos que identifican padecimientos o pacientes sí lo son. Intenta de nuevo (deselecciona las rojas).";
+                    msgMod2.classList.add('bg-red-100', 'text-red-800', 'dark:bg-red-900/50', 'dark:text-red-300');
+                }
+            });
+
+        });
+    </script>
+</body>
+</html>
